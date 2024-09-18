@@ -10,15 +10,7 @@ $int = 20;
 $float = 18.5;
 $str = "Això és una cadena";
 $bool = false;
-
-function apartat($num){
-    $divider = "";
-    if ($num > 1){
-        $divider = "<br/><hr class='divider'></hr>";
-    }
-
-    echo "$divider<h1>Exercici $num</h1>";
-}
+include 'utils.php';
 
 apartat(1);
 
@@ -49,29 +41,33 @@ echo "VARIABLES: <b>X</b>: $X, <b>Y:</b> $Y, <b>N:</b> $N, <b>M:</b> $M" . "<br/
 
 $all = [[$X, $Y], [$N, $M]];
 
-function sumar($a, $b){
+function sumar(int|float|null $a, int|float|null $b): int|float{
     $a += $b;
     return $a;
 }
-function restar($a, $b){
+function restar(int|float $a, int|float $b): int|float{
     $a -= $b;
     return $a;
 }
-function multiplicar($a, $b){
+function multiplicar(int|float $a, int|float $b): int|float{
     $a = $a * $b;
     return $a;
 }
-function mod($a, $b){
-    $a = $a % $b;
+function mod(int|float $a, int|float $b): int|float{
+    if (is_float($a) && is_float($b)){
+        $a = $a - $b * floor($a / $b);
+    } else {
+        $a = $a % $b;
+    }
     return $a;
 }
 
-function dividir($a, $b){
+function dividir(int|float $a, int|float $b): int|float{
     $a = $a / $b;
     return $a;
 }
 
-function doble($a){
+function doble(int|float $a): int|float{
     $a = $a*2;
     return $a;
 }
@@ -99,7 +95,7 @@ echo "Suma de totes les variables: " . array_reduce($flat_array, "sumar") . "<br
 
 echo "<h2>b)</h2>";
 
-function Calculadora($a, $b, $arg){
+function Calculadora(int|float $a, int|float $b, string $arg): void{
     $result = $arg($a, $b);
 
     if($arg === "dividir"){
@@ -116,7 +112,7 @@ Calculadora($X, $Y, "dividir");
 
 apartat(4);
 
-function Counter($num = 10, $step = 1){
+function Counter(int|float $num = 10, int $step = 1): void{
     $art = "d'";
     if ($step != 1){
         $art = "de ";
@@ -132,8 +128,37 @@ Counter(5, 2);
 
 apartat(5);
 
-function Nota($nota){
+function Nota(int|float $nota): void{
+    $base = $nota;
+    $str = "Notes en base a 100<br/>";
+    if (floor($nota / 10) < 1){
+        $str = "Notes en base a 10<br/>";
+        $base = $nota * 10;
+    }
 
+    echo $str;
+
+    if($base >= 60){
+        echo "Primera Divisió";
+    } elseif($base >= 45){
+        echo "Segona Divisió";
+    } elseif($base >= 33){
+        echo "Tercera Divisió";
+    } else {
+        echo "L'estudiant ha de reprovar.";
+    }
 }
+
+Nota(100);
+
+apartat(6);
+
+function isBitten(): string{
+    $a = (random_int(0, 1)) === 0;
+
+    return $a ? "True" : "False";
+}
+
+echo "<b>M'ha mossegat?</b><br/> " . isBitten();
 
 ?>
